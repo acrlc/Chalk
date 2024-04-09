@@ -25,7 +25,8 @@ public enum Color: RawRepresentable {
     case cyan
     case white
     case extended(UInt8)
-    
+    case `default`
+   
     public init?(rawValue: UInt8) {
         switch rawValue {
             case 0: self = .black
@@ -51,6 +52,14 @@ public enum Color: RawRepresentable {
             case .cyan: return 6
             case .white: return 7
             case .extended(let number): return number
+            case .default: fatalError()
+        }
+    }
+ 
+    var isDefault: Bool {
+        switch self {
+            case .default: return true
+            default: return false
         }
     }
 }
@@ -79,16 +88,16 @@ private extension String.StringInterpolation {
 
         var codeStrings: [String] = []
         
-        if let color = color?.rawValue {
+        if let color, !color.isDefault {
             codeStrings.append("38")
             codeStrings.append("5")
-            codeStrings.append("\(color)")
+            codeStrings.append("\(color.rawValue)")
         }
         
-        if let background = background?.rawValue {
+        if let background, !background.isDefault {
             codeStrings.append("48")
             codeStrings.append("5")
-            codeStrings.append("\(background)")
+            codeStrings.append("\(background.rawValue)")
         }
 
         if let style = style {
