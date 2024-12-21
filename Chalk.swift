@@ -26,6 +26,17 @@ public enum Color: RawRepresentable {
     case white
     case extended(UInt8)
     case `default`
+ 
+    /// Add a grayscale color with a value of 0 - 23.
+    public static func white(_ offset: UInt8) -> Self {
+       precondition(offset >= 0 && offset < 24, "White offset must lie between 0 and 24")
+       return .extended(232 + offset)
+    }
+    // Add a grayscale color with a value of 0.0 - 1.0.
+    public static func white(_ percentage: Double) -> Self {
+        return .white(UInt8(23.0 * percentage))
+}
+
    
     public init?(rawValue: UInt8) {
         switch rawValue {
